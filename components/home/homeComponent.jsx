@@ -12,19 +12,19 @@ const HomeComponent = () => {
         <div className="w-full text-justify">
           
           {/* Image with Loader */}
-          <div className="relative md:float-left md:mr-4 mb-26 md:mb-4 max-h-[324px]">
+          <div className="relative md:float-left md:mr-4 mb-26 md:mb-4 max-h-[360px]">
             {loading && (
               <div className="absolute inset-0 flex h-full items-center justify-center bg-gray-100 rounded-lg shadow-lg">
                 <LoaderCircle className="animate-spin h-10 w-10 text-gray-500" />
               </div>
             )}
             <Image
-              src="/assets/aeroplaneImage2.jpg"
+              src="/aeroplaneImage2.jpg"
               alt="Hero Image Description"
               width={486}
               height={324}
               className="object-contain rounded-lg shadow-sm w-full md:w-auto"
-              onLoadingComplete={() => setLoading(false)}
+              onLoad={() => setLoading(false)}
             />
           </div>
 

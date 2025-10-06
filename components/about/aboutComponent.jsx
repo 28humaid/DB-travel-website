@@ -19,12 +19,12 @@ const AboutComponent = () => {
                   </div>
                 )}
                 <Image
-                  src="/assets/aeroplaneImage3.jpg"
+                  src="/aeroplaneImage3.jpg"
                   alt="Hero Image Description"
                   width={482}
                   height={366}
                   className="object-contain rounded-lg shadow-sm w-full md:w-auto"
-                  onLoadingComplete={() => setLoading(false)}
+                  onLoad={() => setLoading(false)}
                 />
               </div>
     
