@@ -25,8 +25,9 @@ export const authOptions = {
           if (!passwordsMatch) {
             return null;
           }
-          // Return user with role
-          return { id: user._id.toString(), username: user.username};
+          // Return user
+          console.log("User from DB:", user);
+          return { id: user._id.toString(), username: user.username, name:user.companyName};
         } catch (error) {
           console.error("Authorize error:", error);
           return null;
@@ -46,7 +47,7 @@ export const authOptions = {
         console.log("JWT callback - Adding user to token:", user);
         token.id = user.id;
         token.username = user.username;
-        // token.role = user.role;  // Uncomment/add if adding roles to schema
+        token.name = user.name;
         }
         return token;
     },
@@ -56,7 +57,7 @@ export const authOptions = {
         if (token) {
         session.user.id = token.id;
         session.user.username = token.username;
-        // session.user.role = token.role;  // Uncomment if using roles
+        session.user.name = token.name;
         }
         console.log("Final session:", session);
         return session;

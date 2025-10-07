@@ -1,9 +1,14 @@
-import ProfileComponent from "@/components/profile/profileComponent"
+import { getAuthSession } from '@/lib/getAuthSession';
+import { redirect } from 'next/navigation';
 
-const Page = () => {
-  return (
-    <ProfileComponent/>
-  )
-}
+const Page = async () => {
+  const session = await getAuthSession();
 
-export default Page
+  if (!session || !session.user?.name) {
+    redirect('/');
+  }
+
+  redirect(`/profile/${session.user.name}`);
+};
+
+export default Page;

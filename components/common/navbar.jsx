@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { Menu, X } from 'lucide-react';
 import LoginModal from '../common/loginModal';
 import { Brand } from '@/data/data';
@@ -10,7 +10,7 @@ import NavLink from '../home/navLink';
 import LogoutButton from '../profile/logoutButton';
 import LogoutConfirmDialog from '../profile/logoutConfirmDialog';
 
-const Navbar = ({ setCurrentPage, currentPage,status }) => {
+const Navbar = ({ setCurrentPage, currentPage,status, companyName = null }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -44,18 +44,18 @@ const Navbar = ({ setCurrentPage, currentPage,status }) => {
     <>
       {/* Desktop skeleton */}
       <div className="hidden md:flex items-center space-x-8">
-        <div className="h-10 w-20 bg-gray-300 rounded animate-pulse" />
-        <div className="h-10 w-20 bg-gray-300 rounded animate-pulse" />
-        <div className="h-10 w-20 bg-gray-300 rounded animate-pulse" />
+        <div className="h-10 w-20 bg-gray-300 rounded-lg animate-pulse" />
+        <div className="h-10 w-20 bg-gray-300 rounded-lg animate-pulse" />
+        <div className="h-10 w-20 bg-gray-300 rounded-lg animate-pulse" />
       </div>
       {/* Mobile skeleton (when menu is open) */}
       {isMobileOpen && (
         <div className="md:hidden bg-gray-100 border-t border-gray-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <div className="h-8 w-full bg-gray-300 rounded animate-pulse" />
-            <div className="h-8 w-full bg-gray-300 rounded animate-pulse" />
+            <div className="h-8 w-full bg-gray-300 rounded-lg animate-pulse" />
+            <div className="h-8 w-full bg-gray-300 rounded-lg animate-pulse" />
             <div className="px-3 py-2">
-              <div className="h-10 w-full bg-gray-300 rounded animate-pulse" />
+              <div className="h-10 w-full bg-gray-300 rounded-lg animate-pulse" />
             </div>
           </div>
         </div>
@@ -67,10 +67,17 @@ const Navbar = ({ setCurrentPage, currentPage,status }) => {
     <nav className="bg-red-200 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Brand/Logo (left side, hidden on mobile if needed) */}
-          <div className="flex-shrink-0">
-            <span className="text-xl font-bold text-blue-500">{Brand.brandName}</span>
-          </div>
+          {status === 'loading' ? (
+            <div className="flex-shrink-0">
+              <div className="h-6 w-32 bg-gray-300 rounded-lg animate-pulse" /> {/* Skeleton for brand */}
+            </div>
+          ) : (
+            <div className="flex-shrink-0">
+              <span className="text-xs md:text-xl font-bold text-blue-500">
+                {companyName ? `Welcome, ${companyName}!` : Brand.brandName}
+              </span>
+            </div>
+          )}
 
           {/* Desktop Navigation (hidden on mobile) */}
           {status === 'loading' ? (

@@ -10,6 +10,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    companyName: { 
+      type: String, 
+    },
   },
   { collection: 'customers' } // Explicitly set collection name
 );
