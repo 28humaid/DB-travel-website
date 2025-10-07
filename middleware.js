@@ -24,5 +24,6 @@ export async function middleware(req) {
 
 // Match all routes except Next.js internals
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+    matcher: ["/profile"],
 };

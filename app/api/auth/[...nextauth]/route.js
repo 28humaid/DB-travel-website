@@ -1,7 +1,5 @@
-console.log('API route /api/auth/[...nextauth] hit');
-
 import { connectMongoDB } from "@/lib/mongodb";
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/models/userAuth";
@@ -39,6 +37,7 @@ export const authOptions = {
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60,
+    // maxAge: 2 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {

@@ -40,8 +40,8 @@ const LoginModal = ({ onClose }) => {
 
         if (res?.ok) {
           // Success: Close modal and redirect
-          onClose(); // Close the modal
           router.push("/profile");
+          onClose(); // Close the modal
           // Alternative: If checking session, import { useSession } from 'next-auth/react' and use it here
           // const { data: session } = useSession();
           // if (session) {
