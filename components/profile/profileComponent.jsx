@@ -35,7 +35,7 @@ const ProfileComponent = ({ session: propSession }) => {
   const ContentLoader = () => (
     <div className="flex flex-col items-center gap-4 mt-8">
       <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-      <p className="text-gray-500 animate-pulse">Loading page content...</p>
+      <p className="text-gray-500 animate-pulse">Loading content...</p>
     </div>
   );
 
