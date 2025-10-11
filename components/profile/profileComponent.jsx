@@ -1,14 +1,37 @@
 "use client";
-import { useState, Suspense } from "react"; // Add Suspense import
+import { useState, Suspense, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Navbar from "../common/navbar";
 import Bookings from "./bookings";
 import Refunds from "./refunds";
 import { Loader2 } from "lucide-react";
+import { fetchBookings, fetchRefunds } from "@/utils/fetchData";
 
 const ProfileComponent = ({ session: propSession }) => {
   const [currentPage, setCurrentPage] = useState('bookings');
   const { data: clientSession, status } = useSession();
+  const [bookings, setBookings] = useState([]);
+  const [refunds, setRefunds] = useState([]);
+  const [bookingsError, setBookingsError] = useState(null);
+  const [refundsError, setRefundsError] = useState(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const bookingsData = await fetchBookings();
+        setBookings(bookingsData);
+      } catch (err) {
+        setBookingsError(err.message);
+      }
+      try {
+        const refundsData = await fetchRefunds();
+        setRefunds(refundsData);
+      } catch (err) {
+        setRefundsError(err.message);
+      }
+    }
+    loadData();
+  }, []);
 
   // Align userObject with client session for consistency (server prop should match)
   const displaySession = clientSession || propSession;
@@ -48,8 +71,8 @@ const ProfileComponent = ({ session: propSession }) => {
         companyName={currentUser.name} 
       />
       <Suspense fallback={<ContentLoader />}>
-        {currentPage === 'bookings' && <Bookings />}
-        {currentPage === 'refunds' && <Refunds />}
+        {currentPage === 'bookings' && <Bookings bookings={bookings} error={bookingsError} />}
+        {currentPage === 'refunds' && <Refunds refunds={refunds} error={refundsError} />}
       </Suspense>
     </div>
   );

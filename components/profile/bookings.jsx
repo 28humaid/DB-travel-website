@@ -1,12 +1,20 @@
-import BrLayout from "./brLayout"
+import BrLayout from "./brLayout";
 
-
-const Bookings = () => {
+const Bookings = ({ bookings, error }) => {
   return (
     <BrLayout>
-        Bookings
+      <h2>Bookings</h2>
+      {error ? (
+        <div className="text-red-500 mt-4">Error: {error}</div>
+      ) : (
+        <ul>
+          {bookings.map((booking) => (
+            <li key={booking._id}>{booking.pnrTicket || "Booking"} - {booking.companyId}</li>
+          ))}
+        </ul>
+      )}
     </BrLayout>
-  )
-}
+  );
+};
 
-export default Bookings
+export default Bookings;
