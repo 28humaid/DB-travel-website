@@ -20,7 +20,7 @@ export async function GET(request) {
     const bookings = await Booking.find({ companyId: companyId }).lean();
 
     if (!bookings || bookings.length === 0) {
-      throw new Error("No bookings found for this company (Error 404).");
+      throw new Error("No bookings found for this company.");
     }
 
     return NextResponse.json(
