@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { createColumnHelper, flexRender, getPaginationRowModel, getCoreRowModel, useReactTable, } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table';
 import Button from '@/components/common/button.jsx'
+import { format, isValid } from 'date-fns';
 
 const Bookings = ({ bookings, error }) => {
   console.log('bookings:', bookings);
@@ -22,11 +23,17 @@ const Bookings = ({ bookings, error }) => {
       // }),
       columnHelper.accessor('dateOfBooking', {
         header: 'Date of Booking',
-        cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        cell: (info) => {
+          const date = new Date(info.getValue());
+          return isValid(date) ? format(date, 'dd-MM-yyyy') : 'Invalid Date';
+        },
       }),
       columnHelper.accessor('dateOfTravel', {
         header: 'Date of Travel',
-        cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        cell: (info) => {
+          const date = new Date(info.getValue());
+          return isValid(date) ? format(date, 'dd-MM-yyyy') : 'Invalid Date';
+        },
       }),
       columnHelper.accessor('destinationStn', { header: 'Destination Station' }),
       columnHelper.accessor('entityName', { header: 'Entity Name' }),
