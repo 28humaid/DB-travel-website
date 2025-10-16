@@ -13,14 +13,14 @@ const TableSum = ({ table, columnAccessor, label }) => {
 
   const getBackgroundColor = () => {
     if (label === "Total Refund Amount") {
-      return "bg-red-300";
+      return "bg-purple-300";
     } else if (label === "Total Amount") {
       return "bg-green-300";
     }
     return "bg-blue-300"; // default no background color
   };
   return (
-    <div className={`my-4 text-lg font-semibold ${getBackgroundColor()}`}>
+    <div className={`my-4 py-1 text-lg font-semibold ${getBackgroundColor()} flex items-center justify-center rounded-lg`}>
       {label}: ₹{sum.toFixed(2)}
     </div>
   );

@@ -128,8 +128,7 @@ const Refunds = ({ refunds, error }) => {
   });
 
   return (
-    <BrLayout>
-      <h2 className="text-2xl font-bold mb-4">Refunds</h2>
+    <BrLayout heading="Refunds">
       {error ? (
         <div className="text-red-500 mt-4">{error}</div>
       ) : (
@@ -188,8 +187,8 @@ const Refunds = ({ refunds, error }) => {
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
             <Button
-              variant="outline"
-              size="sm"
+              variant="primary"
+              size="medium"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
@@ -199,8 +198,8 @@ const Refunds = ({ refunds, error }) => {
               Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
             </span>
             <Button
-              variant="outline"
-              size="sm"
+              variant="primary"
+              size="medium"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >

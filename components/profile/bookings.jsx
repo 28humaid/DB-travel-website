@@ -250,8 +250,7 @@ const Bookings = ({ bookings, error }) => {
   });
 
   return (
-    <BrLayout>
-      <h2 className="text-2xl font-bold mb-4">Bookings</h2>
+    <BrLayout heading="Bookings">
       {error ? (
         <div className="text-red-500 mt-4">{error}</div>
       ) : (
