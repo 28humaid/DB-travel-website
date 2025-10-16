@@ -22,6 +22,7 @@ import Button from '@/components/common/button.jsx';
 import FilterControls from '../bookingsNrefunds/filterControls';
 import TableHeaderWithFilter from '../bookingsNrefunds/tableHeaderWithFilter';
 import { format, isValid, parse, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
+import TableSum from '../bookingsNrefunds/tableSum';
 
 const Refunds = ({ refunds, error }) => {
   console.log('refunds:', refunds);
@@ -148,6 +149,7 @@ const Refunds = ({ refunds, error }) => {
             handleResetFilters={handleResetFilters}
             records="refunds"
           />
+          <TableSum table={table} columnAccessor="refund" label="Total Refund Amount" />
           <div className="rounded-md border">
             <Table>
               <TableHeader>

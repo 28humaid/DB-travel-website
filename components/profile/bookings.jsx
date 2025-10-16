@@ -21,6 +21,7 @@ import Button from '@/components/common/button.jsx';
 import FilterControls from '../bookingsNrefunds/filterControls';
 import TableHeaderWithFilter from '../bookingsNrefunds/tableHeaderWithFilter';
 import { format, isValid, parse, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
+import TableSum from '../bookingsNrefunds/tableSum';
 // import DateFilterInput from '@/components/bookings/DateFilterInput';
 // import DateFilterGroup from '@/components/bookings/DateFilterGroup';
 
@@ -277,6 +278,7 @@ const Bookings = ({ bookings, error }) => {
             handleDateSearch={handleDateSearch}
             handleResetFilters={handleResetFilters}
           />
+          <TableSum table={table} columnAccessor="totalAmount" label="Total Amount" />
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -313,6 +315,7 @@ const Bookings = ({ bookings, error }) => {
               </TableBody>
             </Table>
           </div>
+
           <div className="flex items-center justify-end space-x-2 py-4">
             <Button
               variant="primary"
