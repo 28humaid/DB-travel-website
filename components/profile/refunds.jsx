@@ -23,6 +23,7 @@ import FilterControls from '../bookingsNrefunds/filterControls';
 import TableHeaderWithFilter from '../bookingsNrefunds/tableHeaderWithFilter';
 import { format, isValid, parse, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
 import TableSum from '../bookingsNrefunds/tableSum';
+import ExcelDownloadButton from '../bookingsNrefunds/excelDownloadButton';
 
 const Refunds = ({ refunds, error }) => {
   console.log('refunds:', refunds);
@@ -147,7 +148,14 @@ const Refunds = ({ refunds, error }) => {
             handleDateSearch={handleDateSearch}
             handleResetFilters={handleResetFilters}
             records="refunds"
-          />
+          >
+            <ExcelDownloadButton
+              table={table}
+              columns={columns}
+              filename="refunds.xlsx"
+              greetingsMessage="Thank you for using our system!"
+            />
+          </FilterControls>
           <TableSum table={table} columnAccessor="refund" label="Total Refund Amount" />
           <div className="rounded-md border">
             <Table>

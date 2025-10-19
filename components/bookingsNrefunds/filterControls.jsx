@@ -32,6 +32,7 @@ const FilterControls = ({
   setRefundFromError,
   refundToError,
   setRefundToError,
+  children,
 }) => {
   return (
     <div className="mb-4 flex flex-col gap-4">
@@ -97,6 +98,7 @@ const FilterControls = ({
         <Button variant="danger" onClick={handleResetFilters}>
           Reset All Filters
         </Button>
+        {children}
       </div>
     </div>
   );

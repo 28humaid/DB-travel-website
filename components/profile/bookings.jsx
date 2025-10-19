@@ -22,6 +22,7 @@ import FilterControls from '../bookingsNrefunds/filterControls';
 import TableHeaderWithFilter from '../bookingsNrefunds/tableHeaderWithFilter';
 import { format, isValid, parse, startOfDay, endOfDay, isWithinInterval } from 'date-fns';
 import TableSum from '../bookingsNrefunds/tableSum';
+import ExcelDownloadButton from '../bookingsNrefunds/excelDownloadButton';
 // import DateFilterInput from '@/components/bookings/DateFilterInput';
 // import DateFilterGroup from '@/components/bookings/DateFilterGroup';
 
@@ -276,7 +277,14 @@ const Bookings = ({ bookings, error }) => {
             setTravelToError={setTravelToError}
             handleDateSearch={handleDateSearch}
             handleResetFilters={handleResetFilters}
-          />
+          >
+            <ExcelDownloadButton
+              table={table}
+              columns={columns}
+              filename="bookings.xlsx"
+              greetingsMessage="Thank you for using our system!"
+            />
+          </FilterControls>
           <TableSum table={table} columnAccessor="totalAmount" label="Total Amount" />
           <div className="rounded-md border">
             <Table>
