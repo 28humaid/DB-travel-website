@@ -1,26 +1,14 @@
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { format, isValid } from 'date-fns';
+import { saveAs } from 'file-saver';
 
-const exportToExcel = (rows, columns, filename, greetingsMessage) => {
+const exportToExcel = async (rows, columns, filename, greetingsMessage) => {
   try {
-    console.log('XLSX module loaded:', XLSX);
     console.log('Exporting to Excel with:');
     console.log('Rows:', rows);
     console.log('Columns:', columns);
     console.log('Filename:', filename);
     console.log('Greetings Message:', greetingsMessage);
-
-    // Validate XLSX utilities
-    if (!XLSX.utils) throw new Error('XLSX.utils is undefined');
-    if (!XLSX.utils.aoa_to_sheet) throw new Error('XLSX.utils.aoa_to_sheet is undefined');
-    if (!XLSX.utils.book_new) throw new Error('XLSX.utils.book_new is undefined');
-    if (!XLSX.utils.book_append_sheet) throw new Error('XLSX.utils.book_append_sheet is undefined');
-    if (!XLSX.write) throw new Error('XLSX.write is undefined');
-
-    // Validate browser APIs
-    if (!window.Blob || !window.URL || !window.URL.createObjectURL) {
-      throw new Error('Required browser APIs (Blob or URL.createObjectURL) are not available.');
-    }
 
     // Validate inputs
     if (!columns || !Array.isArray(columns)) {
@@ -30,18 +18,30 @@ const exportToExcel = (rows, columns, filename, greetingsMessage) => {
       throw new Error('Rows array is invalid or missing');
     }
 
-    // Prepare data for Excel
-    const data = [];
+    // Validate browser APIs
+    if (!window.Blob || !window.URL || !window.URL.createObjectURL) {
+      throw new Error('Required browser APIs (Blob or URL.createObjectURL) are not available');
+    }
 
-    // Add greetings message
-    data.push([greetingsMessage || 'Thank you for using our system!']);
-    data.push([]); // Blank row for spacing
+    // Create workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet1', {
+      properties: { defaultColWidth: 15 }, // Default column width for readability
+    });
 
-    // Add headers
-    const headers = columns.map((column) => column.header || '');
-    data.push(headers);
+    // Add greetings message (default style or optional custom style)
+    worksheet.addRow([greetingsMessage || 'Thank you for using our system!']).commit();
+    worksheet.addRow([]).commit(); // Blank row
 
-    // Add filtered row data
+    // Add headers with bold font and size 14
+    const headers = columns.map((column) => column.header || 'N/A');
+    const headerRow = worksheet.addRow(headers);
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true, size: 14 }; // Bold, size 14 for headers
+    });
+    headerRow.commit();
+
+    // Add filtered row data with font size 12, non-bold
     rows.forEach((row, rowIndex) => {
       const rowData = columns.map((column, colIndex) => {
         const accessor = column.accessorKey || column.id;
@@ -62,33 +62,28 @@ const exportToExcel = (rows, columns, filename, greetingsMessage) => {
         }
         return value ?? 'N/A';
       });
-      data.push(rowData);
+      const dataRow = worksheet.addRow(rowData);
+      dataRow.eachCell((cell) => {
+        cell.font = { bold: false, size: 12 }; // Non-bold, size 12 for data
+      });
+      dataRow.commit();
     });
 
-    // Create worksheet
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    console.log('Worksheet created:', ws);
+    // Auto-adjust column widths based on content
+    worksheet.columns.forEach((column, index) => {
+      let maxLength = headers[index]?.length || 10;
+      rows.forEach((row) => {
+        const value = row.getValue(columns[index].accessorKey || columns[index].id) ?? 'N/A';
+        const length = value.toString().length;
+        if (length > maxLength) maxLength = length;
+      });
+      column.width = Math.min(Math.max(maxLength + 2, 10), 50); // Min 10, max 50
+    });
 
-    // Create workbook
-    const wb = XLSX.utils.book_new();
-    console.log('Workbook created:', wb);
-
-    // Append worksheet to workbook
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    console.log('Worksheet appended to workbook');
-
-    // Verify workbook structure
-    if (!wb.SheetNames || !wb.Sheets || !wb.Sheets['Sheet1']) {
-      throw new Error('Invalid workbook structure');
-    }
-
-    // Write and download the file with explicit options
-    const writeOptions = {
-      bookType: 'xlsx',
-      type: 'binary',
-    };
-    console.log('Writing Excel file with options:', writeOptions);
-    XLSX.write(wb, writeOptions, filename || 'export.xlsx');
+    // Generate and download the file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, filename || 'export.xlsx');
     console.log('Excel file written successfully');
   } catch (error) {
     console.error('Error generating Excel file:', error);
@@ -96,4 +91,4 @@ const exportToExcel = (rows, columns, filename, greetingsMessage) => {
   }
 };
 
-export default exportToExcel;
+export default exportToExcel
