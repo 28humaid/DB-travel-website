@@ -1,74 +1,84 @@
-import { connectMongoDB } from "@/lib/mongodb";
+// app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import User from "@/models/userAuth";
+import { prisma } from "@/lib/prisma";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error("NEXTAUTH_SECRET is not defined in environment variables");
 }
 
+/** @type {import("next-auth").NextAuthOptions} */
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
       credentials: {},
       async authorize(credentials) {
-        const { username, password } = credentials;
+        const { username, password } = credentials ?? {};
+        if (!username || !password) return null;
+
+        // const prisma = prisma();
+
         try {
-          await connectMongoDB();
-          const user = await User.findOne({ username });
-          if (!user) {
-            return null;
-          }
-          const passwordsMatch = await bcrypt.compare(password, user.password);
-          if (!passwordsMatch) {
-            return null;
-          }
-          // Return user
-          console.log("User from DB:", user);
-          return { id: user._id.toString(), username: user.username, name:user.companyName};
-        } catch (error) {
-          console.error("Authorize error:", error);
+          // NOTE: `username` maps to `Client.username` (unique in MSSQL)
+          const client = await prisma.client.findUnique({
+            where: { username },
+            select: {
+              clientId: true,
+              passwordHash: true,
+              companyName: true,
+            },
+          });
+
+          if (!client) return null;
+
+          const passwordsMatch = await bcrypt.compare(password, client.passwordHash);
+          if (!passwordsMatch) return null;
+
+          // Return shape expected by NextAuth
+          return {
+            id: client.clientId.toString(),          // <-- PK as string
+            username: username,
+            name: client.companyName ?? undefined,
+          };
+        } catch (err) {
+          console.error("NextAuth authorize error:", err);
           return null;
         }
       },
     }),
   ],
+
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60,
-    // maxAge: 2 * 60,
+    maxAge: 24 * 60 * 60, // 24 h
   },
+
   callbacks: {
     async jwt({ token, user }) {
-        // Initial sign-in: Add user data to token
-        if (user) {
-        console.log("JWT callback - Adding user to token:", user);
+      if (user) {
         token.id = user.id;
         token.username = user.username;
         token.name = user.name;
-        }
-        return token;
+      }
+      return token;
     },
+
     async session({ session, token }) {
-        // Every session access: Add token data to session
-        console.log("Session callback - token:", token);
-        if (token) {
+      if (token) {
         session.user.id = token.id;
         session.user.username = token.username;
         session.user.name = token.name;
-        }
-        console.log("Final session:", session);
-        return session;
+      }
+      return session;
     },
-    },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/",
   },
+
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: { signIn: "/" },
 };
 
+// NextAuth handler (App Router)
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

@@ -3,11 +3,6 @@ import { getAuthToken } from "@/utils/getAuthToken";
 
 export async function fetchBookings() {
   try {
-    // const token = getAuthToken();
-    // if (!token) {
-    //   throw new Error("No authentication token found");
-    // }
-
     const response = await apiRequest({
       url: "/api/read/bookings",
       method: "GET",
@@ -23,11 +18,6 @@ export async function fetchBookings() {
 
 export async function fetchRefunds() {
   try {
-    // const token = getAuthToken();
-    // if (!token) {
-    //   throw new Error("No authentication token found");
-    // }
-
     const response = await apiRequest({
       url: "/api/read/refunds",
       method: "GET",

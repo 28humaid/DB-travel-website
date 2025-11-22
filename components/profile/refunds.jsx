@@ -41,9 +41,9 @@ const Refunds = ({ refunds, error }) => {
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
-      columnHelper.accessor('pnrNo', { header: 'PNR Number', filterFn: 'includesString' }),
+      columnHelper.accessor('serialNo', { header: 'S.No.', filterFn: 'includesString' }),
       columnHelper.accessor('refundDate', {
-        header: 'Refund Date',
+        header: 'REFUND DATE',
         cell: (info) => {
           const date = new Date(info.getValue());
           return isValid(date) ? format(date, 'dd-MM-yyyy') : 'N/A';
@@ -63,12 +63,15 @@ const Refunds = ({ refunds, error }) => {
           return true;
         },
       }),
-      columnHelper.accessor('refund', {
-        header: 'Refund Amount',
+      columnHelper.accessor('pnrNo', { header: 'PNR_NO', filterFn: 'includesString' }),
+      columnHelper.accessor('refundAmount', {
+        header: 'REFUND',
         cell: (info) => info.getValue() ?? 'N/A',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('corporate', { header: 'Corporate Name', filterFn: 'includesString' }),
+      columnHelper.accessor('vendeeCorporate', { header: 'Vendee/Corporate', filterFn: 'includesString' }),
+      columnHelper.accessor('subCorporate', { header: 'Sub-Corporate', filterFn: 'includesString' }),
+      columnHelper.accessor('subEntity', { header: 'Sub-Entity', filterFn: 'includesString' }),
     ],
     [],
   );
@@ -156,7 +159,7 @@ const Refunds = ({ refunds, error }) => {
               greetingsMessage="Thank you for using our system!"
             />
           </FilterControls>
-          <TableSum table={table} columnAccessor="refund" label="Total Refund Amount" />
+          <TableSum table={table} columnAccessor="refundAmount" label="Total Refund Amount" />
           <div className="rounded-md border">
             <Table>
               <TableHeader>

@@ -33,7 +33,7 @@ const LoginModal = ({ onClose }) => {
         });
 
         if (res?.error) {
-          setError("Invalid username or password");
+          setError(error);
           setSubmitting(false);
           return;
         }
