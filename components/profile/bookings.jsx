@@ -55,11 +55,11 @@ const Bookings = ({ bookings, error }) => {
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
-      columnHelper.accessor('serialNo', {
+      columnHelper.accessor('serial_no', {
         header: 'S. No.',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('dateOfBooking', {
+      columnHelper.accessor('date_of_booking', {
         header: 'Date of Booking',
         cell: (info) => {
           const date = new Date(info.getValue());
@@ -80,11 +80,11 @@ const Bookings = ({ bookings, error }) => {
           return true;
         },
       }),
-      columnHelper.accessor('pnrTicketNo', {
+      columnHelper.accessor('pnr_ticket_no', {
         header: 'PNR/Ticket #',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('dateOfTravel', {
+      columnHelper.accessor('date_of_travel', {
         header: 'Date of Travel',
         cell: (info) => {
           const date = new Date(info.getValue());
@@ -113,11 +113,11 @@ const Bookings = ({ bookings, error }) => {
         header: 'Sector',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('originStn', {
+      columnHelper.accessor('origin_stn', {
         header: 'Origin Stn.',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('destinationStn', {
+      columnHelper.accessor('destination_stn', {
         header: 'Destination Stn.',
         filterFn: 'includesString',
       }),
@@ -129,51 +129,51 @@ const Bookings = ({ bookings, error }) => {
         header: 'Quota',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('noOfPax', {
+      columnHelper.accessor('no_of_pax', {
         header: 'No. of Pax',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('ticketAmount', {
+      columnHelper.accessor('ticket_amount', {
         header: 'Ticket Amount',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('sCharges', {
+      columnHelper.accessor('s_charges', {
         header: 'S. Charges',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('gst18', {
+      columnHelper.accessor('gst_18', {
         header: 'GST (18%)',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('totalAmount', {
+      columnHelper.accessor('total_amount', {
         header: 'Total Amount',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('bookingId', {
+      columnHelper.accessor('booking_id', {
         header: 'Booking ID',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('vendeeCorporate', {
+      columnHelper.accessor('vendee_corporate', {
         header: 'Vendee/Corporate',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('subCorporate', {
+      columnHelper.accessor('sub_corporate', {
         header: 'Sub-Corporate',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('subEntity', {
+      columnHelper.accessor('sub_entity', {
         header: 'Sub-Entity',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('nttBillNo', {
+      columnHelper.accessor('ntt_bill_no', {
         header: 'NTT Bill No.',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('invoiceNo', {
+      columnHelper.accessor('invoice_no', {
         header: 'Invoice No.',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('statementPeriod', {
+      columnHelper.accessor('statement_period', {
         header: 'Statement Period',
         cell: (info) => {
           const value = info.getValue();
@@ -196,23 +196,23 @@ const Bookings = ({ bookings, error }) => {
                 rowValue.toString().toLowerCase().includes(filterValue.toLowerCase());
         },
       }),
-      columnHelper.accessor('gstNo', {
+      columnHelper.accessor('gst_no', {
         header: 'GST No.',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('gstState', {
+      columnHelper.accessor('gst_state', {
         header: 'GST State',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('cgst9', {
+      columnHelper.accessor('cgst_9', {
         header: 'CGST %9',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('sgst9', {
+      columnHelper.accessor('sgst_9', {
         header: 'SGST % 9',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('igst18', {
+      columnHelper.accessor('igst_18', {
         header: 'IGST % 18',
         filterFn: 'includesString',
       }),
@@ -234,11 +234,11 @@ const Bookings = ({ bookings, error }) => {
     setBookingFromError(tempBookingFrom && !isValid(bookingFrom) ? 'Invalid Date' : '');
     setBookingToError(tempBookingTo && !isValid(bookingTo) ? 'Invalid Date' : '');
     if (bookingFrom && isValid(bookingFrom) && bookingTo && isValid(bookingTo)) {
-      newFilters.push({ id: 'dateOfBooking', value: [startOfDay(bookingFrom), endOfDay(bookingTo)] });
+      newFilters.push({ id: 'date_of_booking', value: [startOfDay(bookingFrom), endOfDay(bookingTo)] });
     } else if (bookingFrom && isValid(bookingFrom)) {
-      newFilters.push({ id: 'dateOfBooking', value: [startOfDay(bookingFrom), endOfDay(bookingFrom)] });
+      newFilters.push({ id: 'date_of_booking', value: [startOfDay(bookingFrom), endOfDay(bookingFrom)] });
     } else if (bookingTo && isValid(bookingTo)) {
-      newFilters.push({ id: 'dateOfBooking', value: [startOfDay(bookingTo), endOfDay(bookingTo)] });
+      newFilters.push({ id: 'date_of_booking', value: [startOfDay(bookingTo), endOfDay(bookingTo)] });
     }
 
     // Validate and set Date of Travel range
@@ -247,16 +247,16 @@ const Bookings = ({ bookings, error }) => {
     setTravelFromError(tempTravelFrom && !isValid(travelFrom) ? 'Invalid Date' : '');
     setTravelToError(tempTravelTo && !isValid(travelTo) ? 'Invalid Date' : '');
     if (travelFrom && isValid(travelFrom) && travelTo && isValid(travelTo)) {
-      newFilters.push({ id: 'dateOfTravel', value: [startOfDay(travelFrom), endOfDay(travelTo)] });
+      newFilters.push({ id: 'date_of_travel', value: [startOfDay(travelFrom), endOfDay(travelTo)] });
     } else if (travelFrom && isValid(travelFrom)) {
-      newFilters.push({ id: 'dateOfTravel', value: [startOfDay(travelFrom), endOfDay(travelFrom)] });
+      newFilters.push({ id: 'date_of_travel', value: [startOfDay(travelFrom), endOfDay(travelFrom)] });
     } else if (travelTo && isValid(travelTo)) {
-      newFilters.push({ id: 'dateOfTravel', value: [startOfDay(travelTo), endOfDay(travelTo)] });
+      newFilters.push({ id: 'date_of_travel', value: [startOfDay(travelTo), endOfDay(travelTo)] });
     }
 
     // Preserve existing text column filters
     const existingTextFilters = columnFilters.filter(
-      (f) => f.id !== 'dateOfBooking' && f.id !== 'dateOfTravel',
+      (f) => f.id !== 'date_of_booking' && f.id !== 'date_of_travel',
     );
     setColumnFilters([...existingTextFilters, ...newFilters]);
   };
@@ -286,8 +286,8 @@ const Bookings = ({ bookings, error }) => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     globalFilterFn: (row, columnId, filterValue) => {
-      const pnr = row.getValue('pnrTicketNo')?.toString().toLowerCase() || '';
-      const bookingId = row.getValue('bookingId')?.toString().toLowerCase() || '';
+      const pnr = row.getValue('pnr_ticket_no')?.toString().toLowerCase() || '';
+      const bookingId = row.getValue('booking_id')?.toString().toLowerCase() || '';
       return pnr.includes(filterValue.toLowerCase()) || bookingId.includes(filterValue.toLowerCase());
     },
     initialState: { pagination: { pageSize: 20 } },
@@ -328,7 +328,7 @@ const Bookings = ({ bookings, error }) => {
               greetingsMessage="Thank you for using our system!"
             />
           </FilterControls>
-          <TableSum table={table} columnAccessor="totalAmount" label="Total Amount" />
+          <TableSum table={table} columnAccessor="total_amount" label="Total Amount" />
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -338,7 +338,7 @@ const Bookings = ({ bookings, error }) => {
                       <TableHeaderWithFilter
                         key={header.id}
                         header={header}
-                        isDateColumn={['dateOfBooking', 'dateOfTravel'].includes(header.column.id)}
+                        isDateColumn={['date_of_booking', 'date_of_travel'].includes(header.column.id)}
                       />
                     ))}
                   </TableRow>

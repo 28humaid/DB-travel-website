@@ -13,15 +13,15 @@ export async function GET(request) {
       );
     }
 
-    const clientId = Number(session.user.id);
-    if (isNaN(clientId)) {
+    const client_id = Number(session.user.id);
+    if (isNaN(client_id)) {
       throw new Error("Invalid client ID in session");
     }
 
-    // DIRECTLY USE prisma with where: { clientId }
-    const bookings = await prisma.booking.findMany({
-      where: { clientId },  // FILTER HERE
-      orderBy: { serialNo: "asc" },
+    // DIRECTLY USE prisma with where: { client_id }
+    const bookings = await prisma.bookings.findMany({
+      where: { client_id },  // FILTER HERE
+      orderBy: { serial_no: "asc" },
     });
 
     // if (!bookings || bookings.length === 0) {

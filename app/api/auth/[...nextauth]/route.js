@@ -22,25 +22,25 @@ export const authOptions = {
 
         try {
           // NOTE: `username` maps to `Client.username` (unique in MSSQL)
-          const client = await prisma.client.findUnique({
+          const client = await prisma.clients.findUnique({
             where: { username },
             select: {
-              clientId: true,
-              passwordHash: true,
-              companyName: true,
+              client_id: true,
+              password_hash: true,
+              company_name: true,
             },
           });
 
           if (!client) return null;
 
-          const passwordsMatch = await bcrypt.compare(password, client.passwordHash);
+          const passwordsMatch = await bcrypt.compare(password, client.password_hash);
           if (!passwordsMatch) return null;
 
           // Return shape expected by NextAuth
           return {
-            id: client.clientId.toString(),          // <-- PK as string
+            id: client.client_id.toString(),          // <-- PK as string
             username: username,
-            name: client.companyName ?? undefined,
+            name: client.company_name ?? undefined,
           };
         } catch (err) {
           console.error("NextAuth authorize error:", err);

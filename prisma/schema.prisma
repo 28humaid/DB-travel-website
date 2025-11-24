@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Admins {
+  admin_id      Int           @id @default(autoincrement())
+  email         String        @unique @db.NVarChar(100)
+  password_hash String        @db.NVarChar(255)
+  full_name     String?       @db.NVarChar(100)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
+  Clients       Clients[]
+  Upload_Logs   Upload_Logs[]
+}
+
+model Bookings {
+  booking_internal_id Int       @id @default(autoincrement())
+  client_id           Int
+  serial_no           Int?
+  date_of_booking     DateTime? @db.Date
+  pnr_ticket_no       String    @db.NVarChar(50)
+  date_of_travel      DateTime? @db.Date
+  passengerName       String?   @db.NVarChar(100)
+  sector              String?   @db.NVarChar(100)
+  origin_stn          String?   @db.NVarChar(50)
+  destination_stn     String?   @db.NVarChar(50)
+  class               String?   @db.NVarChar(20)
+  quota               String?   @db.NVarChar(20)
+  no_of_pax           Int?
+  ticket_amount       Float?    @db.Money
+  s_charges           Float?    @db.Money
+  gst_18              Float?    @db.Money
+  total_amount        Float?    @db.Money
+  booking_id          String    @db.NVarChar(50)
+  vendee_corporate    String?   @db.NVarChar(150)
+  sub_corporate       String?   @db.NVarChar(150)
+  sub_entity          String?   @db.NVarChar(150)
+  ntt_bill_no         String?   @db.NVarChar(50)
+  invoice_no          String?   @db.NVarChar(50)
+  statement_period    DateTime? @db.Date
+  gst_no              String?   @db.NVarChar(50)
+  gst_state           String?   @db.NVarChar(50)
+  cgst_9              Float?    @db.Money
+  sgst_9              Float?    @db.Money
+  igst_18             Float?    @db.Money
+  created_at          DateTime  @default(now())
+  Clients             Clients   @relation(fields: [client_id], references: [client_id])
+
+  @@unique([client_id, pnr_ticket_no])
+  @@index([client_id, date_of_travel])
+  @@index([pnr_ticket_no])
+}
+
+model Clients {
+  client_id           Int        @id @default(autoincrement())
+  username            String     @unique @db.NVarChar(50)
+  password_hash       String     @db.NVarChar(255)
+  email1              String     @db.NVarChar(100)
+  email2              String?    @db.NVarChar(100)
+  email3              String?    @db.NVarChar(100)
+  mobile_no           String?    @db.NVarChar(20)
+  company_name        String     @db.NVarChar(150)
+  sub_corporate       String?    @db.NVarChar(150)
+  sub_entity          String     @db.NVarChar(150)
+  gst_no              String?    @db.NVarChar(50)
+  address             String?    @db.NVarChar(Max)
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @default(now())
+  created_by_admin_id Int
+  has_excel           Boolean    @default(false)
+  Bookings            Bookings[]
+  Admins              Admins     @relation(fields: [created_by_admin_id], references: [admin_id])
+  Refunds             Refunds[]
+
+  @@unique([company_name, sub_corporate, sub_entity])
+  @@index([company_name, sub_corporate, sub_entity])
+}
+
+model Refunds {
+  refund_internal_id Int       @id @default(autoincrement())
+  client_id          Int
+  serial_no          Int?
+  refund_date        DateTime? @db.Date
+  pnr_no             String    @db.NVarChar(50)
+  refund_amount      Float?    @db.Money
+  vendee_corporate   String?   @db.NVarChar(150)
+  sub_corporate      String?   @db.NVarChar(150)
+  sub_entity         String?   @db.NVarChar(150)
+  created_at         DateTime  @default(now())
+  Clients            Clients   @relation(fields: [client_id], references: [client_id])
+
+  @@unique([client_id, pnr_no])
+  @@index([client_id, refund_date])
+  @@index([pnr_no])
+}
+
+model Upload_Logs {
+  log_id        Int      @id @default(autoincrement())
+  admin_id      Int
+  upload_type   String   @db.NVarChar(20)
+  file_name     String?  @db.NVarChar(255)
+  rows_inserted Int?
+  upload_date   DateTime @default(now())
+  notes         String?  @db.NVarChar(Max)
+  Admins        Admins   @relation(fields: [admin_id], references: [admin_id])
+}
