@@ -41,8 +41,8 @@ const Refunds = ({ refunds, error }) => {
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
-      columnHelper.accessor('serialNo', { header: 'S.No.', filterFn: 'includesString' }),
-      columnHelper.accessor('refundDate', {
+      columnHelper.accessor('serial_no', { header: 'S.No.', filterFn: 'includesString' }),
+      columnHelper.accessor('refund_date', {
         header: 'REFUND DATE',
         cell: (info) => {
           const date = new Date(info.getValue());
@@ -63,15 +63,15 @@ const Refunds = ({ refunds, error }) => {
           return true;
         },
       }),
-      columnHelper.accessor('pnrNo', { header: 'PNR_NO', filterFn: 'includesString' }),
-      columnHelper.accessor('refundAmount', {
+      columnHelper.accessor('pnr_no', { header: 'PNR_NO', filterFn: 'includesString' }),
+      columnHelper.accessor('refund_amount', {
         header: 'REFUND',
         cell: (info) => info.getValue() ?? 'N/A',
         filterFn: 'includesString',
       }),
-      columnHelper.accessor('vendeeCorporate', { header: 'Vendee/Corporate', filterFn: 'includesString' }),
-      columnHelper.accessor('subCorporate', { header: 'Sub-Corporate', filterFn: 'includesString' }),
-      columnHelper.accessor('subEntity', { header: 'Sub-Entity', filterFn: 'includesString' }),
+      columnHelper.accessor('vendee_corporate', { header: 'Vendee/Corporate', filterFn: 'includesString' }),
+      columnHelper.accessor('sub_corporate', { header: 'Sub-Corporate', filterFn: 'includesString' }),
+      columnHelper.accessor('sub_entity', { header: 'Sub-Entity', filterFn: 'includesString' }),
     ],
     [],
   );
@@ -90,16 +90,16 @@ const Refunds = ({ refunds, error }) => {
     setRefundFromError(tempRefundFrom && !isValid(refundFrom) ? 'Invalid Date' : '');
     setRefundToError(tempRefundTo && !isValid(refundTo) ? 'Invalid Date' : '');
     if (refundFrom && isValid(refundFrom) && refundTo && isValid(refundTo)) {
-      newFilters.push({ id: 'refundDate', value: [startOfDay(refundFrom), endOfDay(refundTo)] });
+      newFilters.push({ id: 'refund_date', value: [startOfDay(refundFrom), endOfDay(refundTo)] });
     } else if (refundFrom && isValid(refundFrom)) {
-      newFilters.push({ id: 'refundDate', value: [startOfDay(refundFrom), endOfDay(refundFrom)] });
+      newFilters.push({ id: 'refund_date', value: [startOfDay(refundFrom), endOfDay(refundFrom)] });
     } else if (refundTo && isValid(refundTo)) {
-      newFilters.push({ id: 'refundDate', value: [startOfDay(refundTo), endOfDay(refundTo)] });
+      newFilters.push({ id: 'refund_date', value: [startOfDay(refundTo), endOfDay(refundTo)] });
     }
 
     // Preserve text column filters
     const existingTextFilters = columnFilters.filter(
-      (f) => !['refundDate'].includes(f.id),
+      (f) => !['refund_date'].includes(f.id),
     );
     setColumnFilters([...existingTextFilters, ...newFilters]);
   };
@@ -125,7 +125,7 @@ const Refunds = ({ refunds, error }) => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     globalFilterFn: (row, columnId, filterValue) => {
-      const pnr = row.getValue('pnrNo')?.toString().toLowerCase() || '';
+      const pnr = row.getValue('pnr_no')?.toString().toLowerCase() || '';
       return pnr.includes(filterValue.toLowerCase());
     },
     initialState: { pagination: { pageSize: 20 } },
@@ -159,7 +159,7 @@ const Refunds = ({ refunds, error }) => {
               greetingsMessage="Thank you for using our system!"
             />
           </FilterControls>
-          <TableSum table={table} columnAccessor="refundAmount" label="Total Refund Amount" />
+          <TableSum table={table} columnAccessor="refund_amount" label="Total Refund Amount" />
           <div className="rounded-md border">
             <Table>
               <TableHeader>
@@ -169,7 +169,7 @@ const Refunds = ({ refunds, error }) => {
                       <TableHeaderWithFilter
                         key={header.id}
                         header={header}
-                        isDateColumn={['refundDate'].includes(header.column.id)}
+                        isDateColumn={['refund_date'].includes(header.column.id)}
                       />
                     ))}
                   </TableRow>
