@@ -84,11 +84,11 @@ const exportToExcel = async (rows, columns, filename, greetingsMessage) => {
     worksheet.columns.forEach((column, index) => {
       let maxLength = headers[index]?.length || 10;
       rows.forEach((row) => {
-        const value = row.getValue(columns[index].accessorKey || columns[index].id) ?? 'N/A';
+        const value = row.getValue(columns[index].accessorKey) ?? 'N/A';
         const length = value.toString().length;
         if (length > maxLength) maxLength = length;
       });
-      column.width = Math.min(Math.max(maxLength + 2, 10), 50); // Min 10, max 50
+      column.width = Math.min(Math.max(maxLength + 5, 10), 50); // Min 10, max 50
     });
 
     // Generate and download the file
