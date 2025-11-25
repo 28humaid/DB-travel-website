@@ -3,12 +3,19 @@ import { format, isValid } from 'date-fns';
 import { saveAs } from 'file-saver';
 
 const exportToExcel = async (rows, columns, filename, greetingsMessage) => {
+  const formatToMMMYYYY = (dateString) => {
+      if (!dateString) return '';
+      
+      // If it's already in a recognizable date format, parse and format it
+      const date = new Date(dateString);
+      return isValid(date) ? format(date, 'MMM-yyyy') : '';
+    };
   try {
-    console.log('Exporting to Excel with:');
-    console.log('Rows:', rows);
-    console.log('Columns:', columns);
-    console.log('Filename:', filename);
-    console.log('Greetings Message:', greetingsMessage);
+    // console.log('Exporting to Excel with:');
+    // console.log('Rows:', rows);
+    // console.log('Columns:', columns);
+    // console.log('Filename:', filename);
+    // console.log('Greetings Message:', greetingsMessage);
 
     // Validate inputs
     if (!columns || !Array.isArray(columns)) {
@@ -56,9 +63,13 @@ const exportToExcel = async (rows, columns, filename, greetingsMessage) => {
           console.warn(`Error accessing value for column ${accessor} in row ${rowIndex}:`, error);
           return 'N/A';
         }
-        if (['dateOfBooking', 'dateOfTravel', 'refundDate'].includes(accessor)) {
+        if (['date_of_booking', 'date_of_travel', 'refund_date'].includes(accessor)) {
           const date = new Date(value);
           return isValid(date) ? format(date, 'dd-MM-yyyy') : 'N/A';
+        }
+        // Format statement_period → "MMM-yyyy"
+        if (accessor === "statement_period") {
+          return formatToMMMYYYY(value);
         }
         return value ?? 'N/A';
       });
